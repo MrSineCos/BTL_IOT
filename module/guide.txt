@@ -1,0 +1,15 @@
+{
+    "customer_support": [
+    "For assistance, contact our customer support team at: 123456789"
+  ],
+  "sensor_info": [
+    "Check temperature: 'What is the temperature now?', 'Room temperature'",
+    "Check humidity: 'What is the current humidity?', 'Room humidity'"
+  ],
+  "system_info": [
+    "The system can check temperature, humidity."
+  ],
+  "personal_info": [
+    "To update your personal information, please visit the settings section in the chatbot interface."
+  ]
+}
