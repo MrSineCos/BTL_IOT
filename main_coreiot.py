@@ -1,8 +1,9 @@
 from module import function_exAI
 from module import mqttservice_coreiot
-
+import time
 def main():
     while True:
+        time.sleep(2)
         user_text = input("Bạn: ")
         if user_text.strip().lower() in ["exit", "quit"]:
             break
