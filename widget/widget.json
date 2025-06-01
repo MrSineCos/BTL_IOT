@@ -1,0 +1,79 @@
+{
+  "row": 0,
+  "col": 0,
+  "sizeX": 8,
+  "sizeY": 5,
+  "title": "Chatbot2",
+  "componentAlias": "tb-rpc-widget",
+  "config": {
+    "widgetType": "rpc",
+    "type": "device",
+    "name": "",
+    "deviceId": "3800b260-2a52-11f0-a3c9-ab0d8999f561",
+    "dataKeys": [
+      {
+        "name": "AI",
+        "type": "attribute",
+        "label": "AI",
+        "color": "#4caf50",
+        "settings": {},
+        "_hash": 0.6808021624490965
+      },
+      {
+        "name": "Question",
+        "type": "attribute",
+        "label": "Question",
+        "color": "#4caf50",
+        "settings": {},
+        "_hash": 0.8981586026565928
+      }
+    ],
+    "settingsSchema": {
+      "schema": {
+        "properties": {
+          "requestAttrScope": {
+            "type": "string",
+            "title": "Scope của Attribute",
+            "enum": [
+              "SERVER_SCOPE",
+              "SHARED_SCOPE",
+              "CLIENT_SCOPE"
+            ],
+            "default": "SERVER_SCOPE"
+          },
+          "requestAttrKey": {
+            "type": "string",
+            "title": "Key của Last Question"
+          },
+          "responseKey": {
+            "type": "string",
+            "title": "Key của Bot Response (telemetry)"
+          }
+        }
+      },
+      "form": [
+        {
+          "key": "requestAttrScope"
+        },
+        {
+          "key": "requestAttrKey"
+        },
+        {
+          "key": "responseKey"
+        }
+      ]
+    }
+  },
+  "aliasesInfo": {
+    "datasourceAliases": {},
+    "targetDeviceAlias": null
+  },
+  "filtersInfo": {
+    "datasourceFilters": {}
+  },
+  "originalSize": {
+    "sizeX": 8,
+    "sizeY": 5
+  },
+  "originalColumns": 24
+}

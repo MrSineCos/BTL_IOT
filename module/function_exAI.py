@@ -1,24 +1,25 @@
 import os
 import json
 import re
-from module.mqttservice_coreiot import get_temperature, get_humidity, get_brightness, get_energy_consumption, turn_on_fan, turn_off_fan, turn_on_light, turn_off_light, status_fan, status_light
-# from module.mqttservice_ada import get_temperature, get_humidity, get_brightness, get_energy_consumption, turn_on_fan, turn_off_fan, turn_on_light, turn_off_light
+# from module.mqttservice_coreiot import get_temperature, get_humidity, get_brightness, get_energy_consumption, turn_on_fan, turn_off_fan, turn_on_light, turn_off_light, status_fan, status_light
+# from module.httpservice_coreiot import get_temperature, get_humidity, get_dust, get_gas, get_air
 from module.ExternalAI_API import call_openrouter_chat, ask_openrouter_with_guide
+from websocketAPI.telemetry_subscriber import TelemetrySubscriber
 
+subscriber = TelemetrySubscriber()
+subscriber.start()
 valid_devices = [
-    "light", 
-    "fan",
-    "photosensor",  # cảm biến ánh sáng
     "DHT",  # cảm biến nhiệt độ độ ẩm
-    "PZEM"  # cảm biến điện năng
+    "MQ",    # cảm biến khí gas
+    "GP",   # cảm biến bụi
+    "Air"   # chất lượng không khí
 ]
 valid_actions = [
-    "on", 
-    "off",
-    "status",
     "query_temperature", 
     "query_humidity", 
-    "query_power",
+    "query_gas",
+    "query_dust",
+    "query_air",
     "general_question"  # Thêm loại hành động cho câu hỏi chung
 ]
 
@@ -31,11 +32,9 @@ def build_system_message():
 - action: one of {valid_actions} or null
 If the user asks "temperature", the action is "query_temperature", and the device is "DHT".
 If the user asks "humidity", the action is "query_humidity", and the device is "DHT".
-If the user asks "brightness", the action is "query_brightness", and the device is "photosensor".
-If the user asks "power consumption this month", the action is "query_power", and the device is "PZEM".
-If the user asks "light status", the action is "status", and the device is "light".
-If the user asks "fan status", the action is "status", and the device is "fan".
-If the command is to turn on/off the light/fan, the action is "on"/"off", and the device is "light"/"fan".
+If the user asks "gas", the action is "query_gas", and the device is "MQ".
+If the user asks "dust", the action is "query_dust", and the device is "GP".
+If the user asks "air", the action "query_air", and the device is "Air".
 If the user asks about the system's capabilities, how to use the system, personal info or related to customer service, set action to "general_question" and device to null.
 If it cannot be determined, return null for that field."""
 
@@ -110,45 +109,55 @@ def control_device(device, action, user_text=None):
     Hàm mẫu để điều khiển thiết bị hoặc trả lời câu hỏi dựa trên intent.
     Trả về phản hồi dạng chuỗi.
     """
-    if action in ["on", "off", "status"]:
-        # Điều khiển thiết bị thực tế
-        if device == "fan":
-            if action == "on":
-                turn_on_fan()
-                return "Đã bật quạt."
-            elif action == "off":
-                turn_off_fan()
-                return "Đã tắt quạt."
-            else:
-                # Trang thái quạt
-                status = status_fan()
-                return f"Quạt hiện tại đang {'bật' if status else 'tắt'}."
-            
-        elif device == "light":
-            if action == "on":
-                turn_on_light()
-                return "Đã bật đèn."
-            elif action == "off":
-                turn_off_light()
-                return "Đã tắt đèn."
-            else:
-                # Trạng thái đèn
-                status = status_light()
-                return f"Đèn hiện tại đang {'bật' if status else 'tắt'}."
-        else:
-            return "Ko tìm thấy thiết bị."
-    elif device == "DHT" and action == "query_temperature":
-        temperature = get_temperature()
+    if device == "DHT" and action == "query_temperature":
+        temperature = subscriber.get_telemetry_value(key="temperature")
         return f"Temperature now is {temperature}°C." if temperature else "Unable to get temperature data."
     elif device == "DHT" and action == "query_humidity":
-        humidity = get_humidity()
+        humidity = subscriber.get_telemetry_value(key="humidity")
         return f"Humidity now is {humidity}%." if humidity else "Unable to get humidity data."
-    elif device == "photosensor" and action == "query_brightness":
-        brightness = get_brightness()
-        return f"Brightness now is {brightness}." if brightness else "Unable to get brightness data."
-    elif device == "PZEM" and action == "query_power":
-        power = get_energy_consumption()
-        return f"Power this month is {power} kWh." if power else "Unable to get power data."
+    elif device == "MQ" and action == "query_gas":
+        gas = subscriber.get_telemetry_value(key="mq2")
+        return f"Gas concentration compared to safety threshold now is {gas}%." if gas else "Unable to get gas data."
+    elif device == "GP" and action == "query_dust":
+        dust = subscriber.get_telemetry_value(key="dust")
+        return f"Dust concentration now is {dust} mg/cm^3." if dust else "Unable to get dust data."
+    elif device == "Air" and action == "query_air":
+        temperature = subscriber.get_telemetry_value(key="temperature")
+        humidity = subscriber.get_telemetry_value(key="humidity")
+        gas = subscriber.get_telemetry_value(key="mq2")
+        dust = subscriber.get_telemetry_value(key="dust")
+        air_data = []
+        try:
+            # Tạo danh sách các giá trị có sẵn            
+            if temperature is not None:
+                air_data.append(f"Temperature: {temperature}°C")
+            else:
+                air_data.append("temperature: N/A")
+                
+            if humidity is not None:
+                air_data.append(f"Humidity: {humidity}%")
+            else:
+                air_data.append("Humidity: N/A")
+                
+            if dust is not None:
+                air_data.append(f"Dust: {dust}")
+            else:
+                air_data.append("Dust: N/A")
+                
+            if gas is not None:
+                air_data.append(f"Gas: {gas}")
+            else:
+                air_data.append("Gas: N/A")
+            
+            # Gộp tất cả thành một chuỗi
+            air_summary = " | ".join(air_data)
+            
+            print(f"Air information: {air_summary}")
+            return f"{air_summary}." if air_summary else "Unable to get air info."
+            
+        except Exception as e:
+            print(f"Lỗi lấy thông tin không khí: {e}")
+            return None
     elif action == "general_question":
         guide_data = load_guide()
         # answer = find_guide_answer(user_text or "", guide_data)
@@ -157,6 +166,6 @@ def control_device(device, action, user_text=None):
         else:
             return ("The information you requested is not available. Please contact customer service for assistance.")
     else:
-        return ("Cannot control device or answer question.")
+        return ("I don't understand your question.")
 
 __all__ = ["parse_intent", "control_device", "load_guide", "find_guide_answer"]

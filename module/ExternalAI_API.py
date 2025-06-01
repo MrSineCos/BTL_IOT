@@ -2,9 +2,9 @@ import requests
 import json
 
 OPENROUTER_API = "https://openrouter.ai/api/v1/chat/completions"
-OPENROUTER_API_KEY = "Bearer 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"
+OPENROUTER_API_KEY = "Bearer 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"
 
-def call_openrouter_chat(messages, model="google/gemma-3-12b-it:free", stream=False):
+def call_openrouter_chat(messages, model="deepseek/deepseek-r1-0528-qwen3-8b:free", stream=False):
     """
     Gọi OpenRouter API với messages.
     """

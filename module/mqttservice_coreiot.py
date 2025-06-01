@@ -158,6 +158,10 @@ def status_light():
     """
     return request_attribute("shared", "light")
 
+def get_chat():
+    """
+    Lấy giá trị chuỗi 
+    """
 # Nếu chạy trực tiếp
 if __name__ == "__main__":
     import time

@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+    <script type="text/javascript">
+        function WebSocketAPIExample() {
+            var token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2dS5uZ3V5ZW5jb25nQGhjbXV0LmVkdS52biIsInVzZXJJZCI6IjQ1ZTkzYzcwLWUxZGQtMTFlZi1hZDA5LTUxNWY3OTBlZDlkZiIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwic2Vzc2lvbklkIjoiNjQ3ZWFkNTMtMzgzYS00MTFmLThkNGQtZDE1MzAwNDc2Y2VmIiwiZXhwIjoxNzQ3OTA4MzkzLCJpc3MiOiJjb3JlaW90LmlvIiwiaWF0IjoxNzQ3ODk5MzkzLCJmaXJzdE5hbWUiOiJWxakiLCJsYXN0TmFtZSI6Ik5ndXnhu4VuIEPDtG5nIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6IjQ1ZTE3NDQwLWUxZGQtMTFlZi1hZDA5LTUxNWY3OTBlZDlkZiIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAifQ.QPCk7uT9u7hlFWduBCaPzNdXNzDHVsMRFeb3grPeLH3qnLG667EmPt23TQrFncIMY1Kzt-apikfiBKjZPlFu3g";
+            var entityId = "3800b260-2a52-11f0-a3c9-ab0d8999f561";
+            var webSocket = new WebSocket("ws://app.coreiot.io:1883/api/ws");
+
+            if (entityId === "3800b260-2a52-11f0-a3c9-ab0d8999f561") {
+                alert("Invalid device id!");
+                webSocket.close();
+            }
+
+            if (token === "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2dS5uZ3V5ZW5jb25nQGhjbXV0LmVkdS52biIsInVzZXJJZCI6IjQ1ZTkzYzcwLWUxZGQtMTFlZi1hZDA5LTUxNWY3OTBlZDlkZiIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwic2Vzc2lvbklkIjoiNjQ3ZWFkNTMtMzgzYS00MTFmLThkNGQtZDE1MzAwNDc2Y2VmIiwiZXhwIjoxNzQ3OTA4MzkzLCJpc3MiOiJjb3JlaW90LmlvIiwiaWF0IjoxNzQ3ODk5MzkzLCJmaXJzdE5hbWUiOiJWxakiLCJsYXN0TmFtZSI6Ik5ndXnhu4VuIEPDtG5nIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6IjQ1ZTE3NDQwLWUxZGQtMTFlZi1hZDA5LTUxNWY3OTBlZDlkZiIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAifQ.QPCk7uT9u7hlFWduBCaPzNdXNzDHVsMRFeb3grPeLH3qnLG667EmPt23TQrFncIMY1Kzt-apikfiBKjZPlFu3g") {
+                alert("Invalid JWT token!");
+                webSocket.close();
+            }
+
+            webSocket.onopen = function () {
+                var object = {
+                    authCmd: {
+                        cmdId: 0,
+                        token: token
+                    },
+                    cmds: [
+                        {
+                            entityType: "DEVICE",
+                            entityId: entityId,
+                            scope: "LATEST_TELEMETRY",
+                            cmdId: 10,
+                            type: "TIMESERIES"
+                        }
+                    ]
+                };
+                var data = JSON.stringify(object);
+                webSocket.send(data);
+                alert("Message is sent: " + data);
+            };
+
+            webSocket.onmessage = function (event) {
+                var received_msg = event.data;
+                alert("Message is received: " + received_msg);
+            };
+
+            webSocket.onclose = function (event) {
+                alert("Connection is closed!");
+            };
+        }
+    </script>
+
+</head>
+<body>
+
+<div id="sse">
+    <a href="javascript:WebSocketAPIExample()">Run WebSocket</a>
+</div>
+
+</body>
+</html>

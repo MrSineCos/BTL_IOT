@@ -3,8 +3,7 @@
     "For assistance, contact our customer support team at: 123456789"
   ],
   "sensor_info": [
-    "Check temperature: 'What is the temperature now?', 'Room temperature'",
-    "Check humidity: 'What is the current humidity?', 'Room humidity'"
+    "Check temperature/humidity/dust/gas: 'What is the temperature/humidity/dust/gas now?', 'Current temperature/humidity/dust/gas'"
   ],
   "system_info": [
     "The system can check temperature, humidity."
