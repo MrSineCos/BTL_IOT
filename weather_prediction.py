@@ -304,7 +304,7 @@ scores.mean()
 
 Humidity= get_humidity()
 Temperature= get_temperature()
-client.publish('v1/devices/me/telemetry', json.dumps({"humidity": Humidity, "temperature": Temperature}))
+client.publish('v1/devices/me/telemetry', json.dumps({"humi_input": Humidity, "temp_input": Temperature}))
 print(f"Humidity: {Humidity}, Temperature: {Temperature}")
 
 input_data=[Humidity,Temperature]
