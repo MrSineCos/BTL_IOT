@@ -91,6 +91,16 @@ def find_guide_answer(user_text, guide_data):
     return None
 
 def ask_again(user_text):
+    lower_text = user_text.lower()
+    # Check if all required keywords are present in user_text
+    if all(word in lower_text for word in ['weather', 'predict', 'today']):
+        try:
+            from weather_prediction import result
+            return result()
+        except Exception as e:
+            print(f"Error while calling weather prediction: {e}")
+            return "Unable to predict today's weather at the moment."
+        
     guide_txt_path = os.path.join(os.path.dirname(__file__), "guide.txt")
     if os.path.exists(guide_txt_path):
         with open(guide_txt_path, "r", encoding="utf-8") as f:

@@ -1,5 +1,5 @@
 {
-    "customer_support": [
+  "customer_support": [
     "For assistance, contact our customer support team at: 123456789"
   ],
   "sensor_info": [
