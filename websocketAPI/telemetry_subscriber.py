@@ -1,4 +1,4 @@
-# telemetry_subscriber.py
+# websocketAPI/telemetry_subscriber.py
 
 import json
 import threading
@@ -11,8 +11,8 @@ TB_HOST = 'app.coreiot.io'
 TB_REST_PORT = 80
 TB_WS_PORT = 80
 
-TENANT_USER = ''    # Your email
-TENANT_PASS = ''    # Your password
+TENANT_USER = 'sinecoswifi@gmail.com'    # Your email
+TENANT_PASS = '123sc123'    # Your password
 DEVICE_ID = 'b25a5f30-2a51-11f0-a3c9-ab0d8999f561'
 
 
