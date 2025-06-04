@@ -219,8 +219,8 @@ def get_gas() -> Optional[str]:
     return get_latest_telemetry("mq2")
 
 def get_response() -> Optional[str]:
-    """Lấy giá trị response mới nhất."""
-    return get_latest_telemetry("response")
+    """Lấy giá trị AI telemetry mới nhất."""
+    return get_latest_telemetry("AI")
 
 def get_air() -> Optional[str]:
     """

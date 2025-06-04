@@ -43,8 +43,8 @@ TB_HOST      = 'app.coreiot.io'          # Địa chỉ ThingsBoard của bạn
 TB_REST_PORT = 80                             # 80 (HTTP) hoặc 443 (HTTPS) tùy cấu hình
 TB_WS_PORT   = 80                             # 80 (WS) hoặc 443 (WSS) tùy cấu hình
 
-TENANT_USER  = ''       # Tài khoản Tenant của bạn (email)
-TENANT_PASS  = ''                       # Mật khẩu Tenant
+TENANT_USER = 'sinecoswifi@gmail.com'    # Your email
+TENANT_PASS = '123sc123'    # Your password
 
 # Thay bằng Entity ID (UUID) của thiết bị bạn muốn subscribe
 DEVICE_ID    = 'b25a5f30-2a51-11f0-a3c9-ab0d8999f561'

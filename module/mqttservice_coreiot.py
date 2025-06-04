@@ -1,13 +1,14 @@
 #   module/mqttservice_coreiot.py
 import paho.mqtt.client as mqtt
 import requests
+from typing import Optional, Dict, Any
 
 # === Cấu hình ThingsBoard Cloud ===
 THINGSBOARD_HOST = "app.coreiot.io"
 THINGSBOARD_PORT = 1883
-ACCESS_TOKEN = "aInZbDDLhqg9PaTWZUYr"  # Thay bằng access token của thiết bị trên ThingsBoard
+ACCESS_TOKEN = "X19l788unSsVNz5D6HTW"  # Thay bằng access token của thiết bị trên ThingsBoard
 JWT_TOKEN = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2dS5uZ3V5ZW5jb25nQGhjbXV0LmVkdS52biIsInVzZXJJZCI6IjQ1ZTkzYzcwLWUxZGQtMTFlZi1hZDA5LTUxNWY3OTBlZDlkZiIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwic2Vzc2lvbklkIjoiN2VmZDM3MGYtYTRkZi00Yjk3LWEwYzQtZGJiM2NhZGU5YmQzIiwiZXhwIjoxNzQ3MDQ4MDYyLCJpc3MiOiJjb3JlaW90LmlvIiwiaWF0IjoxNzQ3MDM5MDYyLCJmaXJzdE5hbWUiOiJWxakiLCJsYXN0TmFtZSI6Ik5ndXnhu4VuIEPDtG5nIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6IjQ1ZTE3NDQwLWUxZGQtMTFlZi1hZDA5LTUxNWY3OTBlZDlkZiIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAifQ.YzasnOFtU86GEIgFcfcXy3FcozQ6AEt_mXCKCkqjMKQU-Ydn6lW8-tFTVhpEvSPIoIv_5y04XC251Wsaz-aQnw"
-DEVICE_ID = "ff1ebc00-e693-11ef-87b5-21bccf7d29d5"  # Thay bằng deviceId của thiết bị trên ThingsBoard
+DEVICE_ID = "b25a5f30-2a51-11f0-a3c9-ab0d8999f561"  # Thay bằng deviceId của thiết bị trên ThingsBoard
 # === MQTT client setup ===
 client = mqtt.Client()
 client.username_pw_set(ACCESS_TOKEN)
@@ -111,58 +112,75 @@ def get_humidity():
     """
     return get_latest_telemetry("humidity", JWT_TOKEN, DEVICE_ID)
 
-def get_energy_consumption():
+def get_dust():
     """
-    Lấy giá trị energy telemetry mới nhất.
+    Lấy giá trị dust telemetry mới nhất.
     """
-    return get_latest_telemetry("energy", JWT_TOKEN, DEVICE_ID)
-def get_brightness():
-    """
-    Lấy giá trị brightness telemetry mới nhất.
-    """
-    return get_latest_telemetry("brightness", JWT_TOKEN, DEVICE_ID)
+    return get_latest_telemetry("dust", JWT_TOKEN, DEVICE_ID)
 
-def turn_on_fan():
+def get_gas():
     """
-    Bật quạt (gửi '1' tới feed Fan)
+    Lấy giá trị mq2 telemetry mới nhất.
     """
-    publish_attribute({"fan": True})
+    return get_latest_telemetry("mq2", JWT_TOKEN, DEVICE_ID)
 
-def turn_off_fan():
+def get_question():
     """
-    Tắt quạt (gửi '0' tới feed Fan)
+    Lấy giá trị Question telemetry mới nhất.
     """
-    publish_attribute({"fan": False})
+    return get_latest_telemetry("Question", JWT_TOKEN, DEVICE_ID)
 
-def turn_on_light():
+def get_response():
     """
-    Bật đèn (gửi '1' tới feed Light)
+    Lấy giá trị AI telemetry mới nhất.
     """
-    publish_attribute({"light": True})
+    return get_latest_telemetry("AI", JWT_TOKEN, DEVICE_ID)
 
+def get_air() -> Optional[str]:
+    """
+    Lấy giá trị chung của không khí bao gồm nhiệt độ, độ ẩm, lượng bụi và khí gas.
+    :return: Chuỗi string chứa tất cả thông tin không khí hoặc None nếu lỗi
+    """
+    try:
+        # Lấy tất cả giá trị cảm biến
+        temperature = get_temperature()
+        humidity = get_humidity()
+        dust = get_dust()
+        gas = get_gas()
+        
+        # Tạo danh sách các giá trị có sẵn
+        air_data = []
+        
+        if temperature is not None:
+            air_data.append(f"Temperature: {temperature}°C")
+        else:
+            air_data.append("temperature: N/A")
+            
+        if humidity is not None:
+            air_data.append(f"Humidity: {humidity}%")
+        else:
+            air_data.append("Humidity: N/A")
+            
+        if dust is not None:
+            air_data.append(f"Dust: {dust}")
+        else:
+            air_data.append("Dust: N/A")
+            
+        if gas is not None:
+            air_data.append(f"Gas: {gas}")
+        else:
+            air_data.append("Gas: N/A")
+        
+        # Gộp tất cả thành một chuỗi
+        air_summary = " | ".join(air_data)
+        
+        print(f"📊 Air information: {air_summary}")
+        return air_summary
+        
+    except Exception as e:
+        print(f"❌ Lỗi lấy thông tin không khí: {e}")
+        return None
 
-def turn_off_light():
-    """
-    Tắt đèn (gửi '0' tới feed Light)
-    """
-    publish_attribute({"light": False})
-
-def status_fan():
-    """
-    Lấy trạng thái quạt (True/False)
-    """
-    return request_attribute("shared", "fan")
-
-def status_light():
-    """
-    Lấy trạng thái đèn (True/False)
-    """
-    return request_attribute("shared", "light")
-
-def get_chat():
-    """
-    Lấy giá trị chuỗi 
-    """
 # Nếu chạy trực tiếp
 if __name__ == "__main__":
     import time
