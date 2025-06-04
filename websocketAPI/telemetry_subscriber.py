@@ -11,9 +11,10 @@ TB_HOST = 'app.coreiot.io'
 TB_REST_PORT = 80
 TB_WS_PORT = 80
 
-TENANT_USER = ''    # Your email
-TENANT_PASS = ''    # Your password
-DEVICE_ID = 'b25a5f30-2a51-11f0-a3c9-ab0d8999f561'
+TENANT_USER = 'minh.pham2212075@hcmut.edu.vn'    # Your email
+TENANT_PASS = '2212075'    # Your password
+DEVICE_ID = 'eb308820-ed8e-11ef-87b5-21bccf7d29d5'
+JWT_TOKEN = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtaW5oLnBoYW0yMjEyMDc1QGhjbXV0LmVkdS52biIsInVzZXJJZCI6IjY0ZWNiYzcwLWVkOGUtMTFlZi04N2I1LTIxYmNjZjdkMjlkNSIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwic2Vzc2lvbklkIjoiYTMwODg5NTAtMzVhYy00OGYzLTg4NDAtOTVmZjZhMmNhMzJhIiwiZXhwIjoxNzQ5MDIzNDc0LCJpc3MiOiJjb3JlaW90LmlvIiwiaWF0IjoxNzQ5MDE0NDc0LCJmaXJzdE5hbWUiOiJNSU5IIiwibGFzdE5hbWUiOiJQSOG6oE0gUVVBTkciLCJlbmFibGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiNjRlMzZkYTAtZWQ4ZS0xMWVmLTg3YjUtMjFiY2NmN2QyOWQ1IiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCJ9.6X5LjKZoxwvJXr6VUrHe3ONWqo2KMwoohHeOFbWce_nG1d-sXOF1DxYYolhQ27pbbMmguYYj83KAQHRI5Q-GXA"
 
 
 class TelemetrySubscriber:
@@ -30,25 +31,7 @@ class TelemetrySubscriber:
         self.connected = False
 
     def get_jwt_token(self):
-        login_url = f"http://{self.host}:{self.rest_port}/api/auth/login"
-        payload = {
-            "username": self.username,
-            "password": self.password
-        }
-        headers = {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        }
-
-        resp = requests.post(login_url, json=payload, headers=headers, timeout=10)
-        resp.raise_for_status()
-        data = resp.json()
-
-        token = data.get('token')
-        if not token:
-            raise RuntimeError("Không lấy được token từ ThingsBoard.")
-        self.token = token
-        return token
+        return JWT_TOKEN  # Trả về JWT token đã được cấu hình sẵn
 
     def on_message(self, ws, message):
         try:
@@ -93,7 +76,7 @@ class TelemetrySubscriber:
     def start(self):
         if not self.token:
             self.get_jwt_token()
-
+            
         ws_url = f"ws://{self.host}:{self.ws_port}/api/ws/plugins/telemetry?token={self.token}"
 
         self.ws_app = WebSocketApp(

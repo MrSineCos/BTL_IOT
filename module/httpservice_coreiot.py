@@ -5,15 +5,16 @@ from typing import Optional, Dict, Any
 # === Cấu hình ThingsBoard Cloud ===
 THINGSBOARD_HOST = "app.coreiot.io"
 THINGSBOARD_PORT = 1883
-ACCESS_TOKEN = "X19l788unSsVNz5D6HTW"  # Thay bằng access token của thiết bị trên ThingsBoard
-DEVICE_ID = "b25a5f30-2a51-11f0-a3c9-ab0d8999f561"  # Thay bằng deviceId của thiết bị trên ThingsBoard
+ACCESS_TOKEN = "mze9614291gw4wsthfrz"  # Thay bằng access token của thiết bị trên ThingsBoard
+_jwt_token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtaW5oLnBoYW0yMjEyMDc1QGhjbXV0LmVkdS52biIsInVzZXJJZCI6IjY0ZWNiYzcwLWVkOGUtMTFlZi04N2I1LTIxYmNjZjdkMjlkNSIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwic2Vzc2lvbklkIjoiYTMwODg5NTAtMzVhYy00OGYzLTg4NDAtOTVmZjZhMmNhMzJhIiwiZXhwIjoxNzQ5MDIzNDc0LCJpc3MiOiJjb3JlaW90LmlvIiwiaWF0IjoxNzQ5MDE0NDc0LCJmaXJzdE5hbWUiOiJNSU5IIiwibGFzdE5hbWUiOiJQSOG6oE0gUVVBTkciLCJlbmFibGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiNjRlMzZkYTAtZWQ4ZS0xMWVmLTg3YjUtMjFiY2NmN2QyOWQ1IiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCJ9.6X5LjKZoxwvJXr6VUrHe3ONWqo2KMwoohHeOFbWce_nG1d-sXOF1DxYYolhQ27pbbMmguYYj83KAQHRI5Q-GXA"
+DEVICE_ID = "eb308820-ed8e-11ef-87b5-21bccf7d29d5"  # Thay bằng deviceId của thiết bị trên ThingsBoard
 
 # Thông tin đăng nhập để lấy JWT token
-TENANT_USER = 'sinecoswifi@gmail.com'
-TENANT_PASS = '123sc123'
+TENANT_USER = 'minh.pham2212075@hcmut.edu.vn'    # Your email
+TENANT_PASS = '2212075'    # Your password
 
 # Biến lưu JWT token và thời gian hết hạn
-_jwt_token = None
+# _jwt_token = None
 _token_expires_at = 0
 
 def get_jwt_token(username: str = TENANT_USER, password: str = TENANT_PASS, force_refresh: bool = False) -> Optional[str]:
