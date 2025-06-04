@@ -2,7 +2,6 @@
 import os
 import json
 import re
-# from module.mqttservice_coreiot import get_temperature, get_humidity, get_brightness, get_energy_consumption, turn_on_fan, turn_off_fan, turn_on_light, turn_off_light, status_fan, status_light
 # from module.httpservice_coreiot import get_temperature, get_humidity, get_dust, get_gas, get_air
 from module.ExternalAI_API import call_openrouter_chat, ask_openrouter_with_guide
 from websocketAPI.telemetry_subscriber import TelemetrySubscriber

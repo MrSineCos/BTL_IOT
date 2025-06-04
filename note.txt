@@ -1,7 +1,0 @@
-30/5:
-Sử dụng shared attribute để lưu câu hỏi từ người dùng
-Sử dụng telemetry để lưu câu trả lời từ chatbot
-
-31/5:
-websocket để subscribe telemetry
-
