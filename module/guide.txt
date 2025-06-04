@@ -1,14 +1,11 @@
 {
-    "customer_support": [
-    "For assistance, contact our customer support team at: 123456789"
+  "customer_support": [
+  "For assistance, contact support team at: vu.nguyencong@hcmut.edu.vn"
   ],
   "sensor_info": [
     "Check temperature/humidity/dust/gas: 'What is the temperature/humidity/dust/gas now?', 'Current temperature/humidity/dust/gas'"
   ],
   "system_info": [
-    "The system can check temperature, humidity."
-  ],
-  "personal_info": [
-    "To update your personal information, please visit the settings section in the chatbot interface."
+    "The system can check or answer about environment conditions."
   ]
 }
