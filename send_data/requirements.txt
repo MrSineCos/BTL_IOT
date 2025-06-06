@@ -1,0 +1,27 @@
+# HTTP requests library
+requests==2.32.3
+
+# MQTT client for IoT communication
+paho-mqtt==2.1.0
+
+# WebSocket client library
+websocket-client==1.8.0
+
+# JSON handling (built-in, no need to install)
+# Threading (built-in, no need to install)
+# Time (built-in, no need to install)
+# OS (built-in, no need to install)
+# Sys (built-in, no need to install)
+# Re (built-in, no need to install)
+# Typing (built-in for Python 3.5+, no need to install)
+
+# Development and testing (optional)
+pytest==7.4.3
+pytest-asyncio==0.21.1
+
+# Code formatting (optional)
+black==23.9.1
+flake8==6.1.0
+
+# Environment variables (recommended for API keys)
+python-dotenv==1.0.0

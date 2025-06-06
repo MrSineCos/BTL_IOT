@@ -1,0 +1,11 @@
+{
+  "customer_support": [
+  "For assistance, contact support team at: vu.nguyencong@hcmut.edu.vn"
+  ],
+  "sensor_info": [
+    "Check temperature/humidity/dust/gas: 'What is the temperature/humidity/dust/gas now?', 'Current temperature/humidity/dust/gas'"
+  ],
+  "system_info": [
+    "The system can check or answer about environment conditions."
+  ]
+}
